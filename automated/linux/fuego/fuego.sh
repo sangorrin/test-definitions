@@ -19,6 +19,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+set -xe
+
 usage() {
 	echo "Usage: $0 -d test [-sv]" 1>&2
 	echo " -d test to run (e.g.: Functional.hello_world)"
@@ -63,8 +65,8 @@ mkdir -p "${DEPLOY_DIR}"
 . ../../lib/sh-test-lib
 
 # $1 is the function to call, $2... have arguments to the function
-function call_if_present {
-	if declare -f -F $1 >/dev/null ; then
+call_if_present() {
+	if type "$1" 2>/dev/null | grep -q 'function'; then
 		$@ ;
 	else
 		return 0
@@ -72,20 +74,16 @@ function call_if_present {
 }
 
 # $1 = local file (source); $2 = remote file (destination)
-function put {
-	for par in "${@:1:$(($#-1))}"; do
-		if [ "$par" != "-r" -a "$par" != "${@: -1}" ]; then
-			cp -r "$par" "${@: -1}"
-		fi
-	done
+put() {
+	cp -r "$1" "$2"
 }
 
 # $1 - command to execute
-function cmd {
+cmd() {
 	/bin/sh -c "$@"
 }
 
-function report {
+report() {
 	# $1 - remote shell command, $2 - test log file.
 	RETCODE=/tmp/$$-${RANDOM}
 	touch $RETCODE
@@ -96,7 +94,7 @@ function report {
 	return ${RESULT}
 }
 
-function log_compare {
+log_compare() {
     # 1 - $TESTDIR, 2 - number of results, 3 - Regex, 4 - n, p (i.e. negative or positive)
     local RETURN_VALUE=0
     local PARSED_LOGFILE="testlog.${4}.txt"
@@ -128,7 +126,7 @@ function log_compare {
     return $RETURN_VALUE
 }
 
-source $PWD/$TEST/fuego_test.sh
+. $PWD/$TEST/fuego_test.sh
 
 if [ -n "$tarball" ]; then
 	tar xvf $TESTDIR/$tarball -C $BUILD_DIR --strip-components=1
