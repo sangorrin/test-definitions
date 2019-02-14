@@ -19,8 +19,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-set -xe
-
 usage() {
 	echo "Usage: $0 -d test [-sv]" 1>&2
 	echo " -d test to run (e.g.: Functional.hello_world)"
@@ -44,11 +42,12 @@ done
 
 # output dir
 OUTPUT="$(pwd)/output"
+RESULT_FILE="${OUTPUT}/result.txt"
+export RESULT_FILE
 mkdir -p "${OUTPUT}"
 
 # log dir
 LOGDIR="$(pwd)/output/logs/"
-RESULT_FILE="${LOGDIR}/result.txt"
 TEST_LOG="${LOGDIR}/testlog.txt"
 mkdir -p "${LOGDIR}"
 
@@ -139,5 +138,6 @@ call_if_present test_deploy
 call_if_present test_run
 call_if_present test_fetch_results
 call_if_present test_processing
+check_return "$TEST"
 call_if_present test_cleanup
 
