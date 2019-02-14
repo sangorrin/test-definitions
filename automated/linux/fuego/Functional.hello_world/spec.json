@@ -1,0 +1,15 @@
+{
+    "testName": "Functional.hello_world",
+    "specs": {
+        "hello-fail": {
+            "ARG":"-f"
+        },
+        "hello-random": {
+            "ARG":"-r"
+        },
+        "default": {
+            "ARG":""
+        }
+    }
+}
+

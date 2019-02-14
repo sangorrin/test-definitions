@@ -1,0 +1,15 @@
+fuego_package_version: 1
+name: Functional.hello_world
+description: |
+    Sample test that runs hello world. This test
+    comes with 3 specs that control the test results
+license: MIT
+author: Tim Bird <tim.bird@sony.com>
+maintainer: Tim Bird <tim.bird@sony.com>
+version: 1.1
+fuego_release: 1
+type: Functional
+tags: ['example']
+data_files:
+ - hello-test-1.1.tgz
+ - spec.json

@@ -1,0 +1,30 @@
+metadata:
+    name: fuego
+    format: "Lava-Test-Shell Test Definition 1.0"
+    description: "Fuego test runner"
+    maintainer:
+        - daniel.sangorrin@toshiba.co.jp
+    os:
+        - debian
+        - ubuntu
+        - fedora
+        - centos
+        - openembedded
+    scope:
+        - functional
+        - benchmark
+    environment:
+        - lava-test-shell
+    devices:
+        - bbb
+
+params:
+    # Test to run
+    TEST: "Functional.hello_world"
+
+run:
+    steps:
+        - cd ./automated/linux/fuego/
+        - ./fuego.sh -d "${TEST}"
+        - ../../utils/send-to-lava.sh ./output/result.txt
+
