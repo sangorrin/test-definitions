@@ -25,7 +25,7 @@ usage() {
 	echo " -s skip dependency installs"
 	echo " -v verbose mode"
 	echo " example:"
-	echo " $0 -c Functional.hello_world -s -v"
+	echo " $0 -d Functional.hello_world -s -v"
 	exit 1
 }
 
