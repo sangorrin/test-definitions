@@ -76,7 +76,7 @@ call_if_present() {
 
 # $1 = local file (source); $2 = remote file (destination)
 put() {
-	cp -r "$1" "$2"
+	cp -r "$@"
 }
 
 # $1 - command to execute
