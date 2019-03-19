@@ -146,6 +146,38 @@ log_compare() {
     return $RETURN_VALUE
 }
 
+# check for a program or file on the target, and set a variable if it's present
+# $1 - file, dir or program on target
+# $2 - variable to set during the build
+# $3 - (optional) set of paths to look for on target
+#      if $3 is not specified, a find is done from the root
+#      this requires the 'find' command on the target
+function is_on_target {
+    tmpfile=$(mktemp /tmp/found_loc.XXXXXX)
+    touch $tmpfile
+    if [ -z "$3" ] ; then
+        find / -name "$1" | head -n 1 >$tmpfile
+    else
+        # split search path on colon
+        for d in $(echo "$3" | tr ":" "\n") ; do
+            # execute a command on the target to detect $d/$1
+            if [ -z "$(cat $tmpfile)" -a -e "$d/$1" ] ; then echo "$d/$1" >$tmpfile ; fi
+        done
+    fi
+    LOCATION=$(cat $tmpfile)
+    export $2=$LOCATION
+    cmd "rm $tmpfile"
+    rm -f $tmpfile # -f for tests running on the host
+}
+
+# check for a program or file on a directory listed on the PATH on the target,
+# and set a variable if it's present
+# $1 - file, dir or program on target
+# $2 - variable to set during the build
+function is_on_target_path {
+    is_on_target $1 $2 $PATH
+}
+
 . $PWD/$TEST/fuego_test.sh
 
 if [ -n "$tarball" ]; then
