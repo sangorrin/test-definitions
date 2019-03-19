@@ -1,0 +1,20 @@
+{
+    "testName": "Benchmark.Dhrystone",
+    "fail_case": [
+        {
+            "fail_regexp": "Measured time too small to obtain meaningful results",
+            "fail_message": "Measured time too small to obtain meaningful results. Please increase LOOPS parameter in Dhrystone test spec."
+        }
+    ],
+    "specs": {
+        "default": {
+            "LOOPS":"10000000"
+        },
+        "100M": {
+            "LOOPS":"100000000"
+        },
+        "500M": {
+            "LOOPS":"500000000"
+        }
+    }
+}

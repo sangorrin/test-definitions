@@ -1,0 +1,16 @@
+fuego_package_version: 1
+name: Benchmark.Dhrystone
+description: |
+    Dhrystone measures processor performance.
+license: unknown
+author: Reinhold P. Weicker, Rick Richardson
+maintainer: Tim Bird <tim.bird@sony.com>
+version: 1.1
+fuego_release: 1
+type: Benchmark
+tags: ['']
+data_files:
+ - Dhrystone.tar.bz2
+ - dhry_1.c.patch
+ - spec.json
+ - parser.py

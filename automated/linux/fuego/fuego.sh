@@ -47,19 +47,21 @@ export RESULT_FILE
 mkdir -p "${OUTPUT}"
 
 # log dir
-LOGDIR="$(pwd)/output/logs/"
+LOGDIR="$OUTPUT/logs/"
 TEST_LOG="${LOGDIR}/testlog.txt"
 mkdir -p "${LOGDIR}"
 
 # build directory
-BUILD_DIR="$(pwd)/output/build"
+BUILD_DIR="$OUTPUT/build"
 mkdir -p "${BUILD_DIR}"
 
-# deploy and run directory ($BOARD_TESTDIR/fuego.$TESTDIR)
+# deploy and run directory (see $BOARD_TESTDIR/fuego.$TESTDIR in tests)
 BOARD_TESTDIR=$OUTPUT
 TESTDIR=$TEST
-DEPLOY_DIR=$OUTPUT/fuego.$TESTDIR
-mkdir -p "${DEPLOY_DIR}"
+mkdir -p "$BOARD_TESTDIR/fuego.$TESTDIR"
+
+# test definition folder
+TEST_HOME="$(pwd)/$TEST"
 
 . ../../lib/sh-test-lib
 
@@ -82,6 +84,26 @@ cmd() {
 	/bin/sh -c "$@"
 }
 
+abort_job() {
+	error_fatal "$1"
+}
+
+# check is variable is set and fail if otherwise
+# $1 = variable to check
+# $2 = optional message if variable is missing
+assert_define () {
+    varname=$1
+    if [ -z "${!varname}" ]
+    then
+        if [ -n "$2" ]  ; then
+            msg="$2"
+        else
+            msg="Make sure you use the correct overlays and specs for this test/benchmark."
+        fi
+        abort_job "$1 is not defined. $msg"
+    fi
+}
+
 report() {
 	# $1 - remote shell command, $2 - test log file.
 	RETCODE=/tmp/$$-${RANDOM}
@@ -96,9 +118,8 @@ report() {
 log_compare() {
     # 1 - $TESTDIR, 2 - number of results, 3 - Regex, 4 - n, p (i.e. negative or positive)
     local RETURN_VALUE=0
-    local PARSED_LOGFILE="testlog.${4}.txt"
 
-    if [ -f ${LOGDIR}/testlog.txt ]; then
+    if [ -f ${TEST_LOG} ]; then
         current_count=`cat ${LOGDIR}/testlog.txt | grep -E "${3}" 2>&1 | wc -l`
         if [ "$4" = "p" ]; then
             if [ $current_count -ge $2 ] ; then
@@ -118,7 +139,7 @@ log_compare() {
             fi
         fi
     else
-        echo -e "\nFuego error reason: '$LOGDIR/testlog.txt' is missing.\n"
+        echo -e "\nFuego error reason: '$TEST_LOG' is missing.\n"
         RETURN_VALUE=1
     fi
 
