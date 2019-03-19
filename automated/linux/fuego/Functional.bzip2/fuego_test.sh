@@ -1,5 +1,11 @@
 tarball=bzip2-1.0.5.tar.gz
 
+test_pre_check() {
+    install_deps "bzip2" "$SKIP_INSTALL"
+    is_on_target_path "bzip2" PROGRAM_BZIP2
+    assert_define PROGRAM_BZIP2 "Missing 'bzip2' program on target board"
+}
+
 test_build() {
     echo "#!/bin/sh
     is_busybox() {
