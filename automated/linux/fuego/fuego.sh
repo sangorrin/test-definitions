@@ -29,10 +29,10 @@ usage() {
 	exit 1
 }
 
-while getopts "d:s:v" o; do
+while getopts "d:sv" o; do
 	case "$o" in
 		d) TEST="${OPTARG}" ;;
-		s) SKIP_INSTALL=1 ;;
+		s) SKIP_INSTALL='true' ;;
 		v) VERBOSE=1 ;;
 		*) usage ;;
 	esac

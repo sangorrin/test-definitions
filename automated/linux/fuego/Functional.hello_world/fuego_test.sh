@@ -1,7 +1,7 @@
 tarball=hello-test-1.1.tgz
 
 test_pre_check() {
-    install_deps "build-essential"
+    install_deps "build-essential" "$SKIP_INSTALL"
 }
 
 test_build() {
