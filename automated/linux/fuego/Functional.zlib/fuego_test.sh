@@ -1,10 +1,9 @@
 tarball=zlib-1.2.3.tar.bz2
 
 test_build() {
-    AR=$PREFIX'ar rc'
-    CPP=$PREFIX'gcc -E'
-    CC="gcc" AR="$AR" CPP="$CPP" ./configure --includedir=$SDKROOT/usr/include --libdir=$SDKROOT/usr/lib
-    make LDSHARED="gcc" >/dev/null
+    install_deps "build-essential" "$SKIP_INSTALL"
+    ./configure --includedir=/usr/include --libdir=/usr/lib
+    make >/dev/null
 }
 
 test_deploy() {
