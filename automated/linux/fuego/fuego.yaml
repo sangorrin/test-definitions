@@ -20,11 +20,12 @@ metadata:
 
 params:
     # Test to run
+    SKIP_INSTALL: "True"
     TEST: "Functional.hello_world"
 
 run:
     steps:
         - cd ./automated/linux/fuego/
-        - ./fuego.sh -d "${TEST}"
+        - ./fuego.sh -s "${SKIP_INSTALL}" -d "${TEST}"
         - ../../utils/send-to-lava.sh ./output/result.txt
 
